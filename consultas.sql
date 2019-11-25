@@ -3,10 +3,11 @@
 -- Para essa consulta, é considerado que os staffs apenas participam das atrações que trabalham (não podem participar de outras atrações)
 -- É necessário ter duas horas para realizar a consulta, que retorna onde cada staff estava naquele periodo informado (pode ocorrer ais de um retorno
 -- caso o staff tenha mudado de lugar)
-SELECT P.NOME, A.NOME, PT.HORARIO FROM PARTICIPANTE AS P JOIN STAFF AS S ON 
-P.CODIGO_INGRESSO = S.INGRESSO JOIN PARTICIPA_EVENTO AS PT ON P.CODIGO_INGRESSO = PT.PARTICIPANTE
-JOIN ATRACAO AS A ON PT.ATRACAO = A.NUMERO WHERE (PT.HORARIO > TO_DATE('INICIO_HORA', 'DD-MM-YYYY')
- AND PT.HORARIO < TO_DATE('FINAL_HORA', 'DD-MM-YYYY'))
+SELECT P.NOME, A.NOME, PT.HORARIO FROM PARTICIPANTE AS P
+JOIN STAFF AS S ON P.CODIGO_INGRESSO = S.INGRESSO
+JOIN PARTICIPA_EVENTO AS PT ON P.CODIGO_INGRESSO = PT.PARTICIPANTE
+JOIN ATRACAO AS A ON PT.ATRACAO = A.NUMERO
+WHERE (PT.HORARIO > TO_DATE('INICIO_HORA', 'DD-MM-YYYY') AND PT.HORARIO < TO_DATE('FINAL_HORA', 'DD-MM-YYYY'))
 
 
 -- Consulta: Quantas pessoas visitaram cada atração.
@@ -17,16 +18,19 @@ select A.NOME, count(*) from PARTICIPANTE as P join PARTICIPA_EVENTO as E on P.C
 -- Aqui há duas consultas possíveis:
 
 -- Qual equipamento estava com qual staff em determinado periodo de tempo
-SELECT P.NOME, U.HORARIO, E.ID, E.DESCRICAO FROM PARTICIPANTE AS P JOIN STAFF AS S ON 
-P.CODIGO_INGRESSO = S.INGRESSO JOIN UTILIZA AS U ON P.CODIGO_INGRESSO = U.STAFF JOIN 
-EQUIPAMENTO AS E ON U.EQUIPAMENTO = E.ID WHERE U.HORARIO = 'ALGUM HORARIO'
+SELECT P.NOME, U.HORARIO, E.ID, E.DESCRICAO FROM PARTICIPANTE AS P
+JOIN STAFF AS S ON P.CODIGO_INGRESSO = S.INGRESSO
+JOIN UTILIZA AS U ON P.CODIGO_INGRESSO = U.STAFF
+JOIN EQUIPAMENTO AS E ON U.EQUIPAMENTO = E.ID
+WHERE U.HORARIO = 'ALGUM HORARIO'
 
 
--- Caso por staff
-SELECT P.NOME, U.HORARIO, E.ID, E.DESCRICAO FROM PARTICIPANTE AS P JOIN STAFF AS S ON 
-P.CODIGO_INGRESSO = S.INGRESSO JOIN UTILIZA AS U ON P.CODIGO_INGRESSO = U.STAFF JOIN 
-EQUIPAMENTO AS E ON U.EQUIPAMENTO = E.ID WHERE P.CODIGO_INGRESSO
- = 'ID DO STAFF'
+-- Saber quais equipamentos estavam com um determinado staff, retorna também todos os horários
+SELECT P.NOME, U.HORARIO, E.ID, E.DESCRICAO FROM PARTICIPANTE AS P
+JOIN STAFF AS S ON P.CODIGO_INGRESSO = S.INGRESSO
+JOIN UTILIZA AS U ON P.CODIGO_INGRESSO = U.STAFF
+JOIN EQUIPAMENTO AS E ON U.EQUIPAMENTO = E.ID
+WHERE P.CODIGO_INGRESSO = 'ID DO STAFF'
 
 -- Consulta: Qual foi o principal público de cada influenciador;
 --  @4 - Aqui tem um problema, nao tem duração da participação do brother na atracao, entao só bateria se fosse

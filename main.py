@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-# import sqlHandler
+import sqlHandler as sqlHandler
 
 
 class Ui_MainWindow(object):
@@ -451,7 +451,7 @@ class Ui_MainWindow(object):
             columns.append('PJ.plataforma')
             values.append(plataforma)
 
-        self.table_data = search_game(values,columns)
+        self.table_data = sqlHandler.search_game(values,columns)
         
         header = ['numero_mesa', 'nome', 'ano', 'classif', 'jogo', 'genero', 'jogo', 'plataforma']
         table_model = MyTableModel(self.table_data, header, self)
