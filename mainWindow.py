@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 import sqlHandler
 
 
@@ -276,6 +276,7 @@ class Ui_MainWindow(object):
         self.search_btn.setFont(font)
         self.search_btn.setObjectName("search_btn")
         self.gridLayout_6.addWidget(self.search_btn, 4, 0, 1, 1)
+        self.search_btn.clicked.connect(self.pesquisar)
         self.tableView = QtWidgets.QTableView(self.tab_2)
         self.tableView.setObjectName("tableView")
         self.gridLayout_6.addWidget(self.tableView, 5, 0, 1, 1)
@@ -406,9 +407,55 @@ class Ui_MainWindow(object):
         sqlHandler.insert_new_data('jogo', [mesa, nome, ano, classificacao])
         sqlHandler.insert_new_data('plataforma_jogo', [mesa, plataforma])
         sqlHandler.insert_new_data('genero_jogo', [mesa, genero])
-        
-        
 
+        #reset fields after insert
+        self.nome_lbl_new.setText("")
+        self.genero_lbl_new.setText("")
+        self.mesa_lbl_new.setText("")
+        self.ano_lbl_new.setText("")
+        self.classificacao_lbl_new.setText("")
+        self.plataforma_lbl_new.setText("")
+              
+    def pesquisar(self):
+        name = self.nome_lbl_search.text().strip()
+        genero = self.genero_lbl_search.text().strip()
+        mesa = self.mesa_lbl_search.text().strip()
+        ano = self.ano_lbl_search.text().strip()
+        classificacao = self.classificacao_lbl_search.text().strip()
+        plataforma = self.plataforma_lbl_search.text().strip()
+
+        columns = []
+        values = []
+        
+        if len(name) > 0:
+            columns.append('J.nome')
+            values.append(name)
+
+        if len(genero) > 0:
+            columns.append('GJ.genero')
+            values.append(genero)
+
+        if len(mesa) > 0:
+            columns.append('J.numero_mesa')
+            values.append(mesa)
+
+        if len(ano) > 0:
+            columns.append('J.ano_lancamento')
+            values.append(ano)
+
+        if len(classificacao) > 0:
+            columns.append('J.classificacao_indicativa')
+            values.append(classificacao)
+
+        if len(plataforma) > 0:
+            columns.append('PJ.plataforma')
+            values.append(plataforma)
+
+        self.table_data = search_game(values,columns)
+        
+        header = ['numero_mesa', 'nome', 'ano', 'classif', 'jogo', 'genero', 'jogo', 'plataforma']
+        table_model = MyTableModel(self.table_data, header, self)
+        self.tableView.setModel(tablemodel)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -434,7 +481,31 @@ class Ui_MainWindow(object):
         self.search_btn.setText(_translate("MainWindow", "Pesquisar"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "Listagem"))
 
+class MyTableModel(QtCore.QAbstractTableModel):
+    def __init__(self, datain, headerdata, parent=None):
+        """
+        Args:
+            datain: a list of lists\n
+            headerdata: a list of strings
+        """
+        QtCore.QAbstractTableModel.__init__(self, parent)
+        self.arraydata = datain
+        self.headerdata = headerdata
 
+    def rowCount(self, parent):
+        return len(self.arraydata)
+
+    def columnCount(self, parent):
+        if len(self.arraydata) > 0: 
+            return len(self.arraydata[0]) 
+        return 0
+
+    def data(self, index, role):
+        if not index.isValid():
+            return QtCore.QVariant()
+        elif role != QtCore.Qt.DisplayRole:
+            return QtCore.QVariant()
+        return QtCore.QVariant(self.arraydata[index.row()][index.column()])
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
