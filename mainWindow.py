@@ -309,28 +309,34 @@ class Ui_MainWindow(object):
             msg.setText("Campo: Nome")
             msg.setInformativeText("Nome deve ter no máximo 15 caracteres")
             msg.exec_()
+            return
         if len(name) == 0:
             msg.setText("Campo: Nome")
             msg.setInformativeText("Nome não pode ser nulo")
             msg.exec_()
+            return
 
         if len(genero) > 20:
             msg.setText("Campo: Genêro(s)")
             msg.setInformativeText("Gênero(s) deve ter no máximo 20 caracteres")
             msg.exec_()
+            return
         if len(genero) == 0:
             msg.setText("Campo: Gênero(s)")
             msg.setInformativeText("Gênero(s) não pode ser nulo")
             msg.exec_()
+            return
         
         if len(mesa) > 2:
             msg.setText("Campo: Nº da Mesa")
             msg.setInformativeText("Nº da Mesa deve ter no máximo 2 caracteres")
             msg.exec_()
+            return
         if len(mesa) == 0:
             msg.setText("Campo: Nº da Mesa")
             msg.setInformativeText("Nº da Mesa não pode ser nulo")
             msg.exec_()
+            return
         if len(mesa) <= 2 and len(mesa) != 0:
             try: 
                 int(mesa)
@@ -343,11 +349,15 @@ class Ui_MainWindow(object):
                 msg.setText("Campo: Nº da Mesa")
                 msg.setInformativeText("Nº da Mesa deve ser um inteiro positivo")
                 msg.exec_()
+                return
+
 
         if len(ano) > 4:
             msg.setText("Campo: Ano de Lançamento")
             msg.setInformativeText("Ano de Lançamento deve ter no máximo 4 caracteres")
             msg.exec_()
+            return
+
         if len(ano) <= 4:
             try: 
                 int(ano)
@@ -360,11 +370,14 @@ class Ui_MainWindow(object):
                 msg.setText("Campo: Ano de Lançamento")
                 msg.setInformativeText("Ano de Lançamento deve ser um inteiro positivo")
                 msg.exec_()
+                return
 
         if len(classificacao) > 2:
             msg.setText("Campo: Classificação Indicativa")
             msg.setInformativeText("Classificação Indicativa deve ter no máximo 2 caracteres")
             msg.exec_()
+            return
+
         if len(classificacao) <= 2:
             try: 
                 int(classificacao)
@@ -377,12 +390,18 @@ class Ui_MainWindow(object):
                 msg.setText("Campo: Classificação Indicativa")
                 msg.setInformativeText("Classificação Indicativa deve ser um inteiro positivo")
                 msg.exec_()
+                return
 
         if len(plataforma) > 2:
-            msg.setText("Campo: Nome")
-            msg.setInformativeText("Nome deve ter no máximo 2 caracteres")
+            msg.setText("Campo: Plataforma(s)")
+            msg.setInformativeText("Plataforma(s) deve ter no máximo 2 caracteres")
             msg.exec_()
-
+            return
+        if len(plataforma) == 0:
+            msg.setText("Campo: Plataforma(s)")
+            msg.setInformativeText("Plataforma(s) não pode ser nulo")
+            msg.exec_()
+            return
 
         sqlHandler.insert_new_data('jogo', [mesa, nome, ano, classificacao])
         sqlHandler.insert_new_data('plataforma_jogo', [mesa, plataforma])
