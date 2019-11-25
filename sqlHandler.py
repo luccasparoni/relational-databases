@@ -24,7 +24,7 @@ def insert_new_data(table_name, values, fields= None):
 # Receveive table_name [string], columns[array of strings] and values[array of strings], 
 #  key_name[string] and key_value[string], returns true if succes
 def update_data(table_name, columns, values, key_name, key_value):
-    # cur = con.cursor()
+    cur = con.cursor()
     str_set = ', '.join([(columns[i] + " = \"" + values[i] + "\"") for i in range(len(columns))])
     str_condition = key_name + " = \"" + key_value + "\""
     sql_str = 'alter table ' + table_name + ' set ' + str_set + ' where ' + str_condition
@@ -35,6 +35,15 @@ def update_data(table_name, columns, values, key_name, key_value):
 
 # update_data('name_tabela', ['coluna1', 'coluna2'], ['valor1', 'valor2'], 'chave', 'valor')
 
+
+def search_game(table_name, values, columns):
+    cur = con.cursor()
+    str_select = ' AND '.join([(columns[i] + " = \"" + values[i] + "\"") for i in range(len(columns))])
+    sql_str = 'select * from JOGO as J join GENERO_JOGO as GJ on J.NUMERO_MESA = GJ.JOGO' +
+        'join PLATAFORMA_JOGO as PJ on J.NUMERO_MESA = PJ.JOGO where ' + str_select
+
+    cur.execute(sql_str)
+    return cur
 
 # Optional param: event_name[string]
 # return [int]: number of participants in given event, or [array], with name and counter of participants in each event 
