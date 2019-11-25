@@ -23,7 +23,7 @@ def insert_new_data(table_name, values, fields= None):
 def search_game(values, columns):
     cur = con.cursor()
     str_select = ' AND '.join([(columns[i] + " = \"" + values[i] + "\"") for i in range(len(columns))])
-    sql_str = 'select * from JOGO as J join GENERO_JOGO as GJ on J.NUMERO_MESA = GJ.JOGO' + 'join PLATAFORMA_JOGO as PJ on J.NUMERO_MESA = PJ.JOGO where ' + str_select
+    sql_str = 'select * from JOGO J join GENERO_JOGO GJ on J.NUMERO_MESA = GJ.JOGO' + 'join PLATAFORMA_JOGO PJ on J.NUMERO_MESA = PJ.JOGO where ' + str_select
 
     cur.execute(sql_str)
     res = cur
